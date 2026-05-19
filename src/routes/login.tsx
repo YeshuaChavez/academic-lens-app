@@ -1,14 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { GraduationCap, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { GraduationCap, Mail, Lock, Eye, EyeOff, BookOpen, Shield } from "lucide-react";
 import { useState } from "react";
 import { useRole, type Role } from "../context/RoleContext";
 
 export const Route = createFileRoute("/login")({ component: LoginPage });
 
 const roleConfig = {
-  Estudiante:     { color: "#1A56A0", bg: "#EBF3FB", desc: "Accede a tus cursos, notas y más" },
-  Docente:        { color: "#15803d", bg: "#dcfce7", desc: "Gestiona tus cursos y estudiantes" },
-  Administrador:  { color: "#7c3aed", bg: "#ede9fe", desc: "Panel de control institucional" },
+  Estudiante:    { color: "#1A56A0", bg: "#EBF3FB", desc: "Accede a tus cursos, notas y más", icon: GraduationCap },
+  Docente:       { color: "#15803d", bg: "#dcfce7", desc: "Gestiona tus cursos y estudiantes", icon: BookOpen },
+  Administrador: { color: "#7c3aed", bg: "#ede9fe", desc: "Panel de control institucional",   icon: Shield },
 };
 
 const roleDestination: Record<Role, string> = {
@@ -50,13 +50,17 @@ function LoginPage() {
               {(Object.keys(roleConfig) as Role[]).map((r) => {
                 const rc = roleConfig[r];
                 const active = role === r;
+                const RoleIcon = rc.icon;
                 return (
                   <button key={r} type="button" onClick={() => setRole(r)}
                     className="flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all duration-200 text-sm font-semibold"
                     style={active ? { borderColor: rc.color, background: rc.bg, color: rc.color }
                                   : { borderColor: "#e8e8e4", background: "white", color: "#374151" }}>
                     {r}
-                    {active && <span className="text-[10px] font-normal text-center leading-tight opacity-80">{rc.desc}</span>}
+                    {active
+                      ? <span className="text-[10px] font-normal text-center leading-tight opacity-80">{rc.desc}</span>
+                      : <RoleIcon size={16} style={{ color: "#9ca3af" }} />
+                    }
                   </button>
                 );
               })}
