@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Layout, Card, Badge, StatCard, ProgressBar } from "../../components/Layout";
-import { BookOpen, GraduationCap, CreditCard, Mail, Bell } from "lucide-react";
+import { BookOpen, GraduationCap, CreditCard, Mail, Bell, Hand } from "lucide-react";
 
 export const Route = createFileRoute("/estudiante/dashboard")({ component: EstDashboard });
 
@@ -23,7 +23,9 @@ function EstDashboard() {
     <Layout role="Estudiante">
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Bienvenida, Ana García 👋</h1>
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            Bienvenida, Ana García <Hand size={24} className="text-[#1A56A0]" />
+          </h1>
           <p className="text-sm text-[#6b7280] mt-1">Martes, 19 de mayo 2026 · Ciclo 2026-I</p>
         </div>
 

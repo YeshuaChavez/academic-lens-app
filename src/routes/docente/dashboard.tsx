@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Layout, Card, Badge, StatCard, ProgressBar } from "../../components/Layout";
-import { BookMarked, Users, BarChart3, ClipboardCheck, AlertCircle, CheckCircle2 } from "lucide-react";
+import { BookMarked, Users, BarChart3, ClipboardCheck, AlertCircle, CheckCircle2, Hand } from "lucide-react";
 
 export const Route = createFileRoute("/docente/dashboard")({ component: DocDashboard });
 
@@ -22,7 +22,9 @@ function DocDashboard() {
     <Layout role="Docente">
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Bienvenido, Dr. Roberto Mendoza 👋</h1>
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            Bienvenido, Dr. Roberto Mendoza <Hand size={24} className="text-[#15803d]" />
+          </h1>
           <p className="text-sm text-[#6b7280] mt-1">Martes, 19 de mayo 2026 · Ciclo 2026-I</p>
         </div>
 
