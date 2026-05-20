@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Layout, Card, Badge, StatCard, ProgressBar } from "../../components/Layout";
-import { BookMarked, Users, BarChart3, ClipboardCheck, AlertCircle, CheckCircle2, Hand, ArrowRight, Upload } from "lucide-react";
+import { BookMarked, Users, BarChart3, ClipboardCheck, AlertCircle, CheckCircle2, Hand, ArrowRight, Upload, GraduationCap } from "lucide-react";
 
 export const Route = createFileRoute("/docente/dashboard")({ component: DocDashboard });
 
@@ -30,7 +30,7 @@ function DocDashboard() {
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold mb-3">
-                🏫 Ciclo Académico 2026-I
+                <GraduationCap size={12} className="text-emerald-100" /> Ciclo Académico 2026-I
               </div>
               <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight flex items-center gap-2.5">
                 ¡Hola, Dr. Roberto! <Hand size={28} className="text-yellow-300 animate-bounce" />

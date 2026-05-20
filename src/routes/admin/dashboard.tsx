@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Layout, Card, StatCard, Badge } from "../../components/Layout";
-import { Users, BookMarked, BarChart3, TrendingUp, AlertCircle, CheckCircle2, Clock, ShieldAlert } from "lucide-react";
+import { Users, BookMarked, BarChart3, TrendingUp, AlertCircle, CheckCircle2, Clock, ShieldAlert, Shield } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGrid, PieChart, Pie, Cell, Legend } from "recharts";
 
 export const Route = createFileRoute("/admin/dashboard")({ component: AdminDashboard });
@@ -38,7 +38,7 @@ function AdminDashboard() {
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold mb-3">
-                🛡️ Panel de Control del Sistema
+                <Shield size={12} className="text-purple-100" /> Panel de Control del Sistema
               </div>
               <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight flex items-center gap-2.5">
                 Dirección Académica
