@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Layout, Card, StatCard, Badge } from "../../components/Layout";
-import { Download } from "lucide-react";
+import { Download, BarChart2, CheckCircle2, AlertTriangle, GraduationCap, Trophy } from "lucide-react";
 import { useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGrid } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGrid, Cell } from "recharts";
 
 export const Route = createFileRoute("/estudiante/notas")({ component: EstNotas });
 
@@ -17,71 +17,125 @@ function EstNotas() {
   const [tab, setTab] = useState("2026-I");
   return (
     <Layout role="Estudiante">
-      <div className="space-y-6">
-        <div className="flex items-center justify-between flex-wrap gap-3">
-          <h1 className="text-2xl font-bold">Mis Notas — Ciclo {tab}</h1>
-          <button className="flex items-center gap-2 px-4 py-2 bg-[#1A56A0] text-white rounded-lg text-sm font-semibold hover:bg-[#134680]">
-            <Download size={15} /> Descargar reporte PDF
+      <div className="space-y-8 animate-fade-in font-sans">
+        
+        {/* Header section with PDF download */}
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Registro de Calificaciones</h1>
+            <p className="text-xs text-slate-400 font-semibold mt-0.5">Reporte oficial e historial de rendimiento académico</p>
+          </div>
+          <button className="flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/10 hover:shadow-lg transition-all cursor-pointer">
+            <Download size={14} /> Descargar Reporte PDF
           </button>
         </div>
 
-        <div className="flex gap-1 border-b border-[#e8e8e4]">
-          {["2026-I","2025-II","2025-I"].map(t => (
-            <button key={t} onClick={() => setTab(t)}
-              className={`px-4 py-2.5 text-sm font-semibold border-b-2 -mb-px transition ${t === tab ? "border-[#1A56A0] text-[#1A56A0]" : "border-transparent text-[#6b7280] hover:text-[#374151]"}`}>
-              {t}
+        {/* Cycle Switcher Tabs */}
+        <div className="flex gap-1.5 border-b border-slate-100 pb-px">
+          {["2026-I", "2025-II", "2025-I"].map(t => (
+            <button 
+              key={t} 
+              onClick={() => setTab(t)}
+              className={`px-5 py-3 text-xs font-bold border-b-2 -mb-px transition-all duration-300 cursor-pointer ${
+                t === tab 
+                  ? "border-blue-600 text-blue-600" 
+                  : "border-transparent text-slate-400 hover:text-slate-700"
+              }`}
+            >
+              Ciclo {t}
             </button>
           ))}
         </div>
 
+        {/* Stat Summaries */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <StatCard label="Promedio del ciclo" value="14.8" color="#1A56A0" />
-          <StatCard label="Créditos aprobados" value="18" color="#15803d" bgLight="#dcfce7" />
-          <StatCard label="Cursos desaprobados" value="0" color="#15803d" bgLight="#dcfce7" />
+          <StatCard label="Promedio ponderado" value="15.7" sub="Aprobación destacada" icon={Trophy} color="#059669" bgLight="#ecfdf5" />
+          <StatCard label="Créditos aprobados" value="18" sub="100% de créditos del ciclo" icon={CheckCircle2} color="#1e40af" bgLight="#eff6ff" />
+          <StatCard label="Cursos desaprobados" value="0" sub="Ninguno este ciclo" icon={AlertTriangle} color="#059669" bgLight="#ecfdf5" />
         </div>
 
-        <Card className="p-6">
-          <h2 className="font-semibold mb-4">Detalle de notas</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-[#6b7280] border-b border-[#e8e8e4] text-xs uppercase tracking-wide">
-                  <th className="pb-3 font-semibold">Curso</th><th className="pb-3 font-semibold">Cr.</th>
-                  <th className="pb-3 font-semibold">EP</th><th className="pb-3 font-semibold">EF</th>
-                  <th className="pb-3 font-semibold">Promedio</th><th className="pb-3 font-semibold">Estado</th>
-                </tr>
-              </thead>
-              <tbody>
-                {grades.map(g => (
-                  <tr key={g.code} className={`border-b border-[#f3f3f0] last:border-0 ${g.status === "Aprobado" ? "bg-[#dcfce7]/20" : "bg-[#fee2e2]/20"}`}>
-                    <td className="py-3"><div className="font-semibold">{g.name}</div><div className="text-xs text-[#6b7280]">{g.code}</div></td>
-                    <td className="py-3">{g.credits}</td>
-                    <td className="py-3 font-medium">{g.ep}</td>
-                    <td className="py-3 font-medium">{g.ef}</td>
-                    <td className="py-3 font-bold text-[#1A56A0] text-base">{g.avg}</td>
-                    <td className="py-3"><Badge variant={g.status === "Aprobado" ? "success" : "danger"}>{g.status}</Badge></td>
+        {/* Workspace Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          
+          {/* Detailed Grades Record Card */}
+          <Card className="lg:col-span-3 p-6">
+            <div className="mb-6">
+              <h2 className="font-extrabold text-slate-800 tracking-tight">Detalle de calificaciones</h2>
+              <p className="text-xs text-slate-400 font-semibold mt-0.5">Calificaciones obtenidas en evaluaciones parciales y finales</p>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-slate-700">
+                <thead>
+                  <tr className="text-left text-slate-400 border-b border-slate-100 text-[10px] uppercase font-extrabold tracking-wider">
+                    <th className="pb-3">Curso / Código</th>
+                    <th className="pb-3 text-center">Créditos</th>
+                    <th className="pb-3 text-center">EP</th>
+                    <th className="pb-3 text-center">EF</th>
+                    <th className="pb-3 text-center">Promedio</th>
+                    <th className="pb-3 text-right">Estado</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {grades.map(g => (
+                    <tr key={g.code} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="py-4">
+                        <div className="font-bold text-sm text-slate-800">{g.name}</div>
+                        <div className="text-[10px] text-slate-400 font-bold tracking-wide mt-0.5">{g.code}</div>
+                      </td>
+                      <td className="py-4 text-center text-xs font-bold">{g.credits}</td>
+                      <td className="py-4 text-center text-xs font-semibold text-slate-550">{g.ep.toFixed(1)}</td>
+                      <td className="py-4 text-center text-xs font-semibold text-slate-550">{g.ef.toFixed(1)}</td>
+                      <td className="py-4 text-center font-extrabold text-sm text-blue-700">{g.avg.toFixed(1)}</td>
+                      <td className="py-4 text-right">
+                        <Badge variant={g.status === "Aprobado" ? "success" : "danger"}>{g.status}</Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
 
-        <Card className="p-6">
-          <h2 className="font-semibold mb-4">Evolución de rendimiento</h2>
-          <div className="h-56">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={grades.map(g => ({ name: g.code, nota: g.avg }))}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f3f3f0" />
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                <YAxis domain={[0, 20]} tick={{ fontSize: 12 }} />
-                <Tooltip />
-                <Bar dataKey="nota" fill="#1A56A0" radius={[6,6,0,0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
+          {/* Performance chart */}
+          <Card className="lg:col-span-2 p-6 flex flex-col justify-between">
+            <div>
+              <h2 className="font-extrabold text-slate-800 tracking-tight">Evolución académica</h2>
+              <p className="text-xs text-slate-400 font-semibold mt-0.5">Comparativa de promedios por asignatura</p>
+            </div>
+            
+            <div className="h-60 mt-6 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={grades.map(g => ({ name: g.code, nota: g.avg }))} margin={{ left: -20, right: 10, top: 10, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                  <XAxis dataKey="name" tick={{ fontSize: 10, fontWeight: 700, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
+                  <YAxis domain={[0, 20]} tick={{ fontSize: 10, fontWeight: 700, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
+                  <Tooltip 
+                    contentStyle={{ background: "#0f172a", border: "none", borderRadius: "12px", color: "#fff", fontSize: "11px", fontWeight: "700" }} 
+                    cursor={{ fill: "#f8fafc" }}
+                  />
+                  <Bar dataKey="nota" radius={[6, 6, 0, 0]} maxBarSize={32}>
+                    {grades.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.avg >= 14 ? "#1e40af" : "#ef4444"} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="flex items-center justify-center gap-4 text-[10px] font-bold mt-4 pt-3 border-t border-slate-100">
+              <div className="flex items-center gap-1.5 text-slate-500">
+                <div className="w-2.5 h-2.5 rounded-full bg-blue-700" /> Rendimiento Alto (&gt;=14)
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-500">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500" /> Rendimiento Regular (&lt;14)
+              </div>
+            </div>
+          </Card>
+
+        </div>
+
       </div>
     </Layout>
   );
 }
+

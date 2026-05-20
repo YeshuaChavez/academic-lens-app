@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import {
   GraduationCap, LayoutDashboard, ClipboardList, BarChart3, CreditCard,
   BookOpen, MessageSquare, FileText, Settings, LogOut, Bell, ChevronRight,
-  Users, BookMarked, ClipboardCheck, Upload, Shield,
+  Users, BookMarked, ClipboardCheck, Upload, Search,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import type { Role } from "../context/RoleContext";
@@ -11,9 +11,9 @@ import type { Role } from "../context/RoleContext";
 const navByRole = {
   Estudiante: {
     prefix: "/estudiante",
-    color: "#1A56A0",
-    bgLight: "#EBF3FB",
-    avatarBg: "#1A56A0",
+    color: "#1e40af",
+    bgLight: "#eff6ff",
+    avatarBg: "#1e40af",
     initials: "AG",
     name: "Ana García",
     items: [
@@ -27,9 +27,9 @@ const navByRole = {
   },
   Docente: {
     prefix: "/docente",
-    color: "#15803d",
-    bgLight: "#dcfce7",
-    avatarBg: "#15803d",
+    color: "#059669",
+    bgLight: "#ecfdf5",
+    avatarBg: "#059669",
     initials: "RM",
     name: "Dr. Roberto Mendoza",
     items: [
@@ -44,7 +44,7 @@ const navByRole = {
   Administrador: {
     prefix: "/admin",
     color: "#7c3aed",
-    bgLight: "#ede9fe",
+    bgLight: "#f5f3ff",
     avatarBg: "#7c3aed",
     initials: "DA",
     name: "Dirección Académica",
@@ -76,35 +76,43 @@ export function Layout({ children, role }: { children?: ReactNode; role: Role })
   const roleBadgeStyle = {
     background: cfg.bgLight,
     color: cfg.color,
-    border: `1px solid ${cfg.color}30`,
+    border: `1px solid ${cfg.color}20`,
   };
 
   return (
-    <div className="min-h-screen flex bg-[#f8f8f6]">
+    <div className="min-h-screen flex bg-[#f8fafc] text-slate-900 font-sans">
+      
       {/* ── Sidebar desktop ── */}
-      <aside className="hidden md:flex fixed left-0 top-0 h-screen w-[220px] bg-white border-r border-[#e8e8e4] flex-col z-20">
-        <div className="px-5 py-5 border-b border-[#e8e8e4]">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center text-white flex-shrink-0" style={{ background: cfg.color }}>
-              <GraduationCap size={20} />
+      <aside className="hidden md:flex fixed left-0 top-0 h-screen w-[240px] bg-white border-r border-slate-100 flex-col z-20 shadow-sm">
+        
+        {/* Sidebar Header Brand */}
+        <div className="px-6 py-6 border-b border-slate-100/80">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white flex-shrink-0 shadow-sm transition-transform duration-300 hover:scale-105" 
+              style={{ background: cfg.color }}>
+              <GraduationCap size={22} />
             </div>
             <div>
-              <div className="font-semibold text-[14px] leading-tight">Campus360</div>
-              <div className="text-[10px] text-[#6b7280] leading-tight">Innovatec University</div>
+              <div className="font-extrabold text-[15px] tracking-tight text-slate-800">Campus360</div>
+              <div className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider leading-tight">Innovatec Univ</div>
             </div>
           </div>
-          <div className="flex items-center gap-2 mt-3 p-2 rounded-lg bg-[#f8f8f6]">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0" style={{ background: cfg.avatarBg }}>
+          
+          {/* User Profile Info Card */}
+          <div className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-sm" 
+              style={{ background: cfg.avatarBg }}>
               {cfg.initials}
             </div>
             <div className="min-w-0">
-              <div className="text-xs font-semibold truncate">{cfg.name}</div>
-              <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full" style={roleBadgeStyle}>{role}</span>
+              <div className="text-xs font-bold text-slate-800 truncate">{cfg.name}</div>
+              <span className="text-[9px] font-bold px-2 py-0.5 rounded-full inline-block mt-0.5 tracking-wide" style={roleBadgeStyle}>{role}</span>
             </div>
           </div>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+        {/* Navigation Items */}
+        <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
           {cfg.items.map((item) => {
             const active = pathname === item.to || pathname.startsWith(item.to + "/");
             const Icon = item.icon;
@@ -112,70 +120,92 @@ export function Layout({ children, role }: { children?: ReactNode; role: Role })
               <Link
                 key={item.to}
                 to={item.to}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition relative ${
-                  active ? "text-white" : "text-[#374151] hover:bg-[#f3f4f6]"
+                className={`flex items-center gap-3 px-3 py-3 rounded-xl text-xs font-bold transition-all duration-200 group relative ${
+                  active 
+                    ? "text-white shadow-md shadow-blue-500/10" 
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50/80"
                 }`}
-                style={active ? { background: cfg.color } : {}}
+                style={active ? { backgroundColor: cfg.color } : {}}
               >
-                {active && <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r" style={{ background: cfg.color, filter: "brightness(0.7)" }} />}
-                <Icon size={17} />
+                <Icon size={17} className={`transition-transform duration-200 group-hover:scale-110 ${active ? "text-white" : "text-slate-400 group-hover:text-slate-700"}`} />
                 {item.label}
               </Link>
             );
           })}
         </nav>
 
-        <div className="px-3 py-4 border-t border-[#e8e8e4] space-y-0.5">
+        {/* Sidebar Footer Operations */}
+        <div className="p-4 border-t border-slate-100/80 space-y-1 bg-slate-50/50">
           {role !== "Administrador" && (
-            <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#374151] hover:bg-[#f3f4f6]">
-              <Settings size={17} /> Configuración
+            <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 transition-colors">
+              <Settings size={17} className="text-slate-400" /> Configuración
             </button>
           )}
-          <Link to="/login" className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#b91c1c] hover:bg-[#fee2e2]">
+          <Link to="/login" className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-red-600 hover:text-red-700 hover:bg-red-50/80 transition-all">
             <LogOut size={17} /> Cerrar sesión
           </Link>
         </div>
       </aside>
 
-      <div className="flex-1 md:ml-[220px] flex flex-col min-h-screen pb-16 md:pb-0">
+      {/* Main Content Area */}
+      <div className="flex-1 md:ml-[240px] flex flex-col min-h-screen pb-16 md:pb-0">
+        
         {/* ── Header ── */}
-        <header className="h-14 bg-white border-b border-[#e8e8e4] flex items-center justify-between px-6 sticky top-0 z-10">
-          <div className="flex items-center gap-2 text-sm text-[#6b7280]">
-            <span style={{ color: cfg.color }} className="font-medium">Campus360</span>
-            <ChevronRight size={14} />
-            <span className="text-[#1a1a1a] font-medium">{label}</span>
+        <header className="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-6 md:px-8 sticky top-0 z-10 shadow-sm/50">
+          
+          {/* Breadcrumbs / Page Title */}
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
+            <span style={{ color: cfg.color }} className="font-bold tracking-tight">Campus360</span>
+            <ChevronRight size={13} className="text-slate-300" />
+            <span className="text-slate-700 font-bold">{label}</span>
           </div>
-          <div className="flex items-center gap-3">
-            <button className="relative w-8 h-8 rounded-full hover:bg-[#f3f4f6] flex items-center justify-center text-[#374151]">
-              <Bell size={17} />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ background: cfg.color }} />
+
+          {/* Quick Actions Header */}
+          <div className="flex items-center gap-4">
+            
+            {/* Search Input Bar (Desktop) */}
+            <div className="hidden sm:flex relative items-center">
+              <Search size={14} className="absolute left-3 text-slate-400" />
+              <input 
+                placeholder="Buscar en el sistema..." 
+                className="pl-9 pr-4 py-1.5 w-48 text-xs font-semibold border border-slate-200 rounded-full bg-slate-50 focus:outline-none focus:bg-white focus:w-64 focus:border-slate-800 transition-all duration-300"
+              />
+            </div>
+
+            {/* Notifications */}
+            <button className="relative w-9 h-9 rounded-xl hover:bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer group">
+              <Bell size={16} className="group-hover:rotate-12 transition-transform" />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full ring-2 ring-white animate-pulse" style={{ background: cfg.color }} />
             </button>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full text-white flex items-center justify-center text-xs font-bold" style={{ background: cfg.avatarBg }}>
+
+            {/* Profile Menu (Avatar) */}
+            <div className="flex items-center gap-2.5 border-l border-slate-100 pl-4">
+              <div className="w-8 h-8 rounded-full text-white flex items-center justify-center text-xs font-bold shadow-sm" style={{ background: cfg.avatarBg }}>
                 {cfg.initials}
               </div>
-              <div className="hidden sm:block leading-tight">
-                <div className="text-xs font-semibold">{cfg.name}</div>
-                <div className="text-[10px] font-medium" style={{ color: cfg.color }}>{role}</div>
+              <div className="hidden sm:block leading-none">
+                <div className="text-xs font-bold text-slate-800">{cfg.name}</div>
+                <span className="text-[9px] font-bold tracking-wider mt-0.5 block" style={{ color: cfg.color }}>{role}</span>
               </div>
             </div>
           </div>
         </header>
 
-        <main className="flex-1 p-6 md:p-8">{children ?? <Outlet />}</main>
+        {/* Main Workspace Frame */}
+        <main className="flex-1 p-6 md:p-8 max-w-7xl w-full mx-auto">{children ?? <Outlet />}</main>
       </div>
 
       {/* ── Mobile bottom nav ── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#e8e8e4] flex justify-around py-1.5 z-30">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100/80 flex justify-around py-2 z-30 shadow-lg px-2">
         {cfg.items.slice(0, 5).map((item) => {
           const active = pathname.startsWith(item.to);
           const Icon = item.icon;
           return (
             <Link key={item.to} to={item.to}
-              className="flex flex-col items-center gap-0.5 px-2 py-1 text-[9px] font-medium"
-              style={{ color: active ? cfg.color : "#6b7280" }}
+              className="flex flex-col items-center gap-1 px-3 py-1 text-[9px] font-bold transition-all duration-200"
+              style={{ color: active ? cfg.color : "#94a3b8" }}
             >
-              <Icon size={19} />
+              <Icon size={18} className={active ? "scale-110" : ""} />
               {item.label.split(" ")[0]}
             </Link>
           );
@@ -188,31 +218,29 @@ export function Layout({ children, role }: { children?: ReactNode; role: Role })
 // ── Reusable Card ─────────────────────────────────────────────────────────────
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`bg-white border border-[#e8e8e4] rounded-xl ${className}`} style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}>
+    <div className={`bg-white border border-slate-100 rounded-2xl premium-card-shadow ${className}`}>
       {children}
     </div>
   );
 }
 
 // ── StatCard ──────────────────────────────────────────────────────────────────
-export function StatCard({ label, value, sub, icon: Icon, color = "#1A56A0", bgLight = "#EBF3FB" }: {
+export function StatCard({ label, value, sub, icon: Icon, color = "#1e40af", bgLight = "#eff6ff" }: {
   label: string; value: string; sub?: string; icon?: any; color?: string; bgLight?: string;
 }) {
   return (
-    <Card className="p-5">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs text-[#6b7280] font-medium">{label}</p>
-          <p className="text-2xl font-semibold mt-1" style={{ color }}>{value}</p>
-          {sub && <p className="text-[11px] text-[#6b7280] mt-0.5">{sub}</p>}
-        </div>
-        {Icon && (
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: bgLight, color }}>
-            <Icon size={17} />
-          </div>
-        )}
+    <div className="bg-white border border-slate-100 rounded-2xl p-5 flex items-start justify-between premium-card-shadow hover:scale-[1.01] transition-transform duration-300">
+      <div>
+        <p className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">{label}</p>
+        <p className="text-3xl font-extrabold mt-1.5 tracking-tight text-slate-900">{value}</p>
+        {sub && <p className="text-[11px] font-semibold text-slate-400 mt-1">{sub}</p>}
       </div>
-    </Card>
+      {Icon && (
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm" style={{ background: bgLight, color }}>
+          <Icon size={18} />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -222,16 +250,16 @@ export function Badge({ children, variant = "default" }: {
   variant?: "default" | "success" | "danger" | "warning" | "primary" | "green" | "purple";
 }) {
   const styles: Record<string, string> = {
-    default: "bg-gray-100 text-gray-700",
-    success: "bg-[#dcfce7] text-[#15803d]",
-    danger: "bg-[#fee2e2] text-[#b91c1c]",
-    warning: "bg-[#fef3c7] text-[#b45309]",
-    primary: "bg-[#EBF3FB] text-[#1A56A0]",
-    green: "bg-[#dcfce7] text-[#15803d]",
-    purple: "bg-[#ede9fe] text-[#7c3aed]",
+    default: "bg-slate-100 text-slate-600 border-slate-200/50",
+    success: "bg-[#ecfdf5] text-[#059669] border-[#d1fae5]",
+    danger: "bg-[#fef2f2] text-[#ef4444] border-[#fee2e2]",
+    warning: "bg-[#fffbeb] text-[#d97706] border-[#fef3c7]",
+    primary: "bg-[#eff6ff] text-[#1e40af] border-[#dbeafe]",
+    green: "bg-[#ecfdf5] text-[#059669] border-[#d1fae5]",
+    purple: "bg-[#f5f3ff] text-[#7c3aed] border-[#e0e7ff]",
   };
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${styles[variant]}`}>
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${styles[variant]}`}>
       {children}
     </span>
   );
@@ -239,14 +267,15 @@ export function Badge({ children, variant = "default" }: {
 
 // ── SectionTitle ──────────────────────────────────────────────────────────────
 export function SectionTitle({ children }: { children: ReactNode }) {
-  return <h2 className="font-semibold text-[15px] text-[#1a1a1a]">{children}</h2>;
+  return <h2 className="font-extrabold text-[15px] tracking-tight text-slate-900">{children}</h2>;
 }
 
 // ── Progress bar ──────────────────────────────────────────────────────────────
-export function ProgressBar({ value, color = "#1A56A0" }: { value: number; color?: string }) {
+export function ProgressBar({ value, color = "#1e40af" }: { value: number; color?: string }) {
   return (
-    <div className="h-1.5 bg-[#f3f3f0] rounded-full overflow-hidden w-full">
-      <div className="h-full rounded-full transition-all" style={{ width: `${value}%`, background: color }} />
+    <div className="h-2 bg-slate-100 rounded-full overflow-hidden w-full border border-slate-200/20">
+      <div className="h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${value}%`, background: color }} />
     </div>
   );
 }
+
