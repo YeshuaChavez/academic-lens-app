@@ -130,31 +130,31 @@ function LoginPage() {
           </div>
         </div>
 
-        {/* Right form panel — full width on mobile, 48% on desktop with glass background */}
-        <div className="w-full lg:w-[48%] flex items-center justify-center px-5 py-10 lg:py-12 bg-white/[0.07] backdrop-blur-md lg:border-l border-white/10 shadow-2xl">
-          <div className="w-full max-w-[420px] bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-7 shadow-[0_8px_32px_rgba(0,0,0,0.3)] space-y-7">
+        {/* Right form panel — full width on mobile, 48% on desktop with glass background from left panel */}
+        <div className="w-full lg:w-[48%] flex items-center justify-center px-5 py-10 lg:py-12 glass-panel lg:border-l lg:border-white/50 shadow-2xl">
+          <div className="w-full max-w-[420px] space-y-7">
 
             {/* Mobile brand header */}
             <div className="lg:hidden flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center">
-                <GraduationCap className="text-white" size={18} />
+              <div className="w-9 h-9 rounded-xl bg-slate-900/10 border border-slate-900/20 flex items-center justify-center">
+                <GraduationCap className="text-slate-800" size={18} />
               </div>
               <div>
-                <span className="font-extrabold text-white text-lg tracking-tight">Campus360</span>
-                <span className="block text-[9px] text-white/60 uppercase tracking-widest font-semibold -mt-0.5">Innovatec University</span>
+                <span className="font-extrabold text-slate-800 text-lg tracking-tight">Campus360</span>
+                <span className="block text-[9px] text-slate-500 uppercase tracking-widest font-semibold -mt-0.5">Innovatec University</span>
               </div>
             </div>
 
             {/* Heading */}
             <div>
-              <h1 className="text-2xl lg:text-3xl font-extrabold text-white tracking-tight">¡Bienvenido de nuevo!</h1>
-              <p className="text-sm text-white/60 mt-1">Ingresa tus credenciales para acceder al campus.</p>
+              <h1 className="text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">¡Bienvenido de nuevo!</h1>
+              <p className="text-sm text-slate-600 mt-1">Ingresa tus credenciales para acceder al campus.</p>
             </div>
 
             {/* Role selector */}
             <div className="space-y-2">
-              <label className="text-[11px] font-bold text-white/50 uppercase tracking-wider block">Rol de acceso</label>
-              <div className="grid grid-cols-3 gap-2 bg-white/10 p-1.5 rounded-xl border border-white/15">
+              <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Rol de acceso</label>
+              <div className="grid grid-cols-3 gap-2 bg-slate-100/80 p-1.5 rounded-xl border border-slate-200/50">
                 {(Object.keys(roleConfig) as Role[]).map((r) => {
                   const rc = roleConfig[r];
                   const active = role === r;
@@ -167,10 +167,10 @@ function LoginPage() {
                       className={`flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-lg text-xs font-bold transition-all duration-200 select-none ${
                         active
                           ? "bg-white text-slate-900 shadow-md"
-                          : "text-white/60 hover:text-white hover:bg-white/15"
+                          : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/50"
                       }`}
                     >
-                      <RoleIcon size={16} className={active ? "" : "text-white/40"} style={active ? { color: rc.color } : {}} />
+                      <RoleIcon size={16} className={active ? "" : "text-slate-400"} style={active ? { color: rc.color } : {}} />
                       {r}
                     </button>
                   );
@@ -181,9 +181,9 @@ function LoginPage() {
             {/* Form */}
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-white/80 block">Correo electrónico institucional</label>
+                <label className="text-xs font-bold text-slate-700 block">Correo electrónico institucional</label>
                 <div className="relative group">
-                  <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40 transition-colors group-focus-within:text-white" />
+                  <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-slate-800" />
                   <input
                     type="email"
                     required
@@ -194,29 +194,29 @@ function LoginPage() {
                       : "admin@innovatec.edu.pe"
                     }
                     placeholder="ejemplo@innovatec.edu.pe"
-                    className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-white/30 focus:outline-none focus:border-white/50 focus:ring-1 focus:ring-white/30 transition-all font-medium"
+                    className="w-full pl-10 pr-4 py-3 bg-white/50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800/30 transition-all font-medium"
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="text-xs font-bold text-white/80 block">Contraseña</label>
-                  <a href="#" className="text-xs font-bold text-white/50 hover:text-white transition-colors">¿La olvidaste?</a>
+                  <label className="text-xs font-bold text-slate-700 block">Contraseña</label>
+                  <a href="#" className="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors">¿La olvidaste?</a>
                 </div>
                 <div className="relative group">
-                  <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40 transition-colors group-focus-within:text-white" />
+                  <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-slate-800" />
                   <input
                     type={showPassword ? "text" : "password"}
                     required
                     defaultValue="campus2026"
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-11 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-white/30 focus:outline-none focus:border-white/50 focus:ring-1 focus:ring-white/30 transition-all font-medium"
+                    className="w-full pl-10 pr-11 py-3 bg-white/50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800/30 transition-all font-medium"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors p-1"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-800 transition-colors p-1"
                   >
                     {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
@@ -241,13 +241,14 @@ function LoginPage() {
             </form>
 
             {/* Footer */}
-            <div className="text-center text-xs text-white/30 pt-2 border-t border-white/10 flex justify-between">
+            <div className="text-center text-xs text-slate-400 pt-2 border-t border-slate-200/50 flex justify-between">
               <span>© 2026 Campus360</span>
-              <span className="font-semibold text-white/40">Innovatec University</span>
+              <span className="font-semibold text-slate-500">Innovatec University</span>
             </div>
 
           </div>
         </div>
+
       </div>
     </div>
   );
