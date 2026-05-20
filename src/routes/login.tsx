@@ -181,7 +181,7 @@ function LoginPage() {
               <div className="relative group">
                 <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-slate-800" />
                 <input 
-                  type={showPwd ? "text" : "password"} 
+                  type={showPassword ? "text" : "password"} 
                   required
                   defaultValue="campus2026"
                   placeholder="••••••••"
@@ -189,10 +189,10 @@ function LoginPage() {
                 />
                 <button 
                   type="button" 
-                  onClick={() => setShowPwd(!showPwd)}
+                  onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-800 transition-colors p-1"
                 >
-                  {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
