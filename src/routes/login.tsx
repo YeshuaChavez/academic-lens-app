@@ -147,11 +147,7 @@ function LoginPage() {
 
           {/* Form */}
           <form 
-            onSubmit={(e) => { 
-              e.preventDefault(); 
-              saveRole(role); 
-              nav({ to: roleDestination[role] }); 
-            }} 
+            onSubmit={handleLogin} 
             className="space-y-5"
           >
             <div className="space-y-1.5">
@@ -163,7 +159,7 @@ function LoginPage() {
                   required
                   defaultValue={
                     role === "Estudiante" ? "ana.garcia@innovatec.edu.pe"
-                    : role === "Docente" ? "r.mendoza@innovatec.edu.pe"
+                    : role === "Docente" ? "roberto.mendoza@innovatec.edu.pe"
                     : "admin@innovatec.edu.pe"
                   }
                   key={role} // Key forces re-render so defaultValue resets properly
@@ -200,10 +196,18 @@ function LoginPage() {
             {/* Login button */}
             <button 
               type="submit"
-              className={`w-full text-white font-bold py-3.5 rounded-xl transition-all duration-300 transform shadow-md hover:shadow-lg active:scale-[0.98] cursor-pointer text-sm text-center`}
+              disabled={loading}
+              className={`w-full text-white font-bold py-3.5 rounded-xl transition-all duration-300 transform shadow-md hover:shadow-lg active:scale-[0.98] cursor-pointer text-sm text-center flex items-center justify-center gap-2 disabled:opacity-75 disabled:cursor-not-allowed`}
               style={{ backgroundColor: cfg.color }}
             >
-              Iniciar sesión como {role}
+              {loading ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Iniciando sesión...</span>
+                </>
+              ) : (
+                <span>Iniciar sesión como {role}</span>
+              )}
             </button>
           </form>
 
