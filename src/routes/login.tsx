@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { GraduationCap, Mail, Lock, Eye, EyeOff, BookOpen, Shield } from "lucide-react";
+import { GraduationCap, Mail, Lock, Eye, EyeOff, BookOpen, Shield, ShieldCheck, Zap } from "lucide-react";
 import { useState } from "react";
 import { useRole, type Role } from "../context/RoleContext";
 
@@ -18,22 +18,40 @@ const roleDestination: Record<Role, string> = {
 };
 
 function LoginPage() {
-  const [showPwd, setShowPwd] = useState(false);
   const [role, setRole] = useState<Role>("Estudiante");
-  const { setRole: saveRole } = useRole();
-  const nav = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { setRole: setGlobalRole } = useRole();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setGlobalRole(role);
+    navigate({ to: roleDestination[role] });
+  };
+
   const cfg = roleConfig[role];
 
   return (
     <div className="min-h-screen flex bg-slate-50 overflow-hidden font-sans">
-      {/* Left Pane - Hero Image (Desktop only) */}
-      <div className="hidden lg:flex lg:w-[55%] relative flex-col justify-between p-12 text-white overflow-hidden select-none">
-        {/* Background Image with overlay */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-in-out scale-105"
-          style={{ backgroundImage: "url('/login-hero.png')" }}
-        />
-        <div className={`absolute inset-0 opacity-85 transition-colors duration-500 ${
+      {/* Left Pane - Hero Background Video / Image (Desktop only) */}
+      <div className="hidden lg:flex lg:w-[55%] relative flex-col justify-between p-12 text-white overflow-hidden select-none bg-slate-950">
+        {/* Background Video */}
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-in-out scale-105 opacity-60 pointer-events-none"
+          poster="/login-hero.png"
+        >
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-students-walking-in-university-campus-41584-large.mp4" type="video/mp4" />
+        </video>
+        {/* Dynamic Role Overlay */}
+        <div className={`absolute inset-0 opacity-80 transition-colors duration-500 pointer-events-none ${
           role === "Estudiante" ? "bg-blue-950" : role === "Docente" ? "bg-emerald-950" : "bg-purple-950"
         }`} />
         
@@ -69,9 +87,15 @@ function LoginPage() {
              : role === "Docente" ? "Registra calificaciones de manera simple, haz el seguimiento de asistencia de tus alumnos y comparte recursos de estudio de forma ágil."
              : "Supervisa las operaciones académicas, gestiona usuarios, analiza reportes institucionales y mantén la plataforma configurada de forma segura."}
           </p>
-          <div className="mt-6 flex gap-4 text-xs font-semibold text-slate-500 border-t border-slate-200/50 pt-4">
-            <div>💡 Campus seguro SSL</div>
-            <div>⚡ Servidores de alta velocidad</div>
+          <div className="mt-6 flex gap-6 text-xs font-bold text-slate-500 border-t border-slate-200/50 pt-4">
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck size={14} className="text-slate-400" />
+              <span>Campus seguro SSL</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Zap size={14} className="text-slate-400" />
+              <span>Servidores de alta velocidad</span>
+            </div>
           </div>
         </div>
       </div>
