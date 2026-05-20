@@ -48,7 +48,7 @@ function LoginPage() {
           className="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-in-out scale-105 opacity-60 pointer-events-none"
           poster="/login-hero.png"
         >
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-students-walking-in-university-campus-41584-large.mp4" type="video/mp4" />
+          <source src="/login-bg.mp4" type="video/mp4" />
         </video>
         {/* Dynamic Role Overlay */}
         <div className={`absolute inset-0 opacity-80 transition-colors duration-500 pointer-events-none ${
