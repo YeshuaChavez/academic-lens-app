@@ -1,14 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { GraduationCap, Mail, Lock, Eye, EyeOff, BookOpen, Shield, ShieldCheck, Zap } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRole, type Role } from "../context/RoleContext";
 
 export const Route = createFileRoute("/login")({ component: LoginPage });
 
 const roleConfig = {
-  Estudiante:    { color: "#1e40af", bg: "#eff6ff", desc: "Accede a tus cursos, notas y más", icon: GraduationCap, gradient: "gradient-student" },
-  Docente:       { color: "#059669", bg: "#ecfdf5", desc: "Gestiona tus cursos y estudiantes", icon: BookOpen, gradient: "gradient-teacher" },
-  Administrador: { color: "#7c3aed", bg: "#f5f3ff", desc: "Panel de control institucional",   icon: Shield, gradient: "gradient-admin" },
+  Estudiante:    { color: "#1e40af", bg: "#eff6ff", desc: "Accede a tus cursos, notas y más", icon: GraduationCap, gradient: "gradient-student", mobileBg: "from-blue-950 via-blue-900 to-blue-800" },
+  Docente:       { color: "#059669", bg: "#ecfdf5", desc: "Gestiona tus cursos y estudiantes", icon: BookOpen, gradient: "gradient-teacher", mobileBg: "from-emerald-950 via-emerald-900 to-emerald-800" },
+  Administrador: { color: "#7c3aed", bg: "#f5f3ff", desc: "Panel de control institucional",   icon: Shield, gradient: "gradient-admin", mobileBg: "from-purple-950 via-purple-900 to-purple-800" },
 };
 
 const roleDestination: Record<Role, string> = {
@@ -17,17 +17,37 @@ const roleDestination: Record<Role, string> = {
   Administrador: "/admin/dashboard",
 };
 
+const VIDEOS = ["/login-bg.mp4", "/login-bg2.mp4"];
+
 function LoginPage() {
   const [role, setRole] = useState<Role>("Estudiante");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [activeVideo, setActiveVideo] = useState(0);
+  const video1Ref = useRef<HTMLVideoElement>(null);
+  const video2Ref = useRef<HTMLVideoElement>(null);
   const navigate = useNavigate();
   const { setRole: setGlobalRole } = useRole();
+
+  // Crossfade between videos every 8 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveVideo((prev) => (prev === 0 ? 1 : 0));
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Preload both videos
+  useEffect(() => {
+    if (video2Ref.current) {
+      video2Ref.current.src = VIDEOS[1];
+      video2Ref.current.load();
+    }
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 800));
     setGlobalRole(role);
     navigate({ to: roleDestination[role] });
@@ -36,26 +56,36 @@ function LoginPage() {
   const cfg = roleConfig[role];
 
   return (
-    <div className="min-h-screen flex bg-slate-50 overflow-hidden font-sans">
-      {/* Left Pane - Hero Background Video / Image (Desktop only) */}
+    <div className="min-h-screen flex overflow-hidden font-sans">
+      {/* Left Pane - Crossfade Videos (Desktop only) */}
       <div className="hidden lg:flex lg:w-[55%] relative flex-col justify-between p-12 text-white overflow-hidden select-none bg-slate-950">
-        {/* Background Video */}
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-in-out scale-105 opacity-60 pointer-events-none"
+        {/* Video 1 - Campus */}
+        <video
+          ref={video1Ref}
+          autoPlay loop muted playsInline
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-1000"
+          style={{ opacity: activeVideo === 0 ? 0.6 : 0 }}
           poster="/login-hero.png"
         >
-          <source src="/login-bg.mp4" type="video/mp4" />
+          <source src={VIDEOS[0]} type="video/mp4" />
         </video>
+
+        {/* Video 2 - Library */}
+        <video
+          ref={video2Ref}
+          autoPlay loop muted playsInline
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-1000"
+          style={{ opacity: activeVideo === 1 ? 0.6 : 0 }}
+        >
+          <source src={VIDEOS[1]} type="video/mp4" />
+        </video>
+
         {/* Dynamic Role Overlay */}
         <div className={`absolute inset-0 opacity-80 transition-colors duration-500 pointer-events-none ${
           role === "Estudiante" ? "bg-blue-950" : role === "Docente" ? "bg-emerald-950" : "bg-purple-950"
         }`} />
-        
-        {/* Abstract shapes for futuristic vibe */}
+
+        {/* Abstract dot grid */}
         <div className="absolute inset-0 opacity-15 pointer-events-none"
           style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 2px)", backgroundSize: "32px 32px" }} />
 
@@ -78,8 +108,8 @@ function LoginPage() {
             Portal del {role}
           </span>
           <h2 className="text-3xl font-extrabold text-slate-900 leading-tight mb-2">
-            {role === "Estudiante" ? "Lleva tu aprendizaje al siguiente nivel" 
-             : role === "Docente" ? "Potencia el potencial de tus alumnos" 
+            {role === "Estudiante" ? "Lleva tu aprendizaje al siguiente nivel"
+             : role === "Docente" ? "Potencia el potencial de tus alumnos"
              : "Control total de la gestión educativa"}
           </h2>
           <p className="text-sm text-slate-600 leading-relaxed">
@@ -100,28 +130,32 @@ function LoginPage() {
         </div>
       </div>
 
-      {/* Right Pane - Form Container */}
-      <div className="w-full lg:w-[45%] flex items-center justify-center px-6 py-12 bg-white relative">
-        <div className="w-full max-w-[420px] space-y-8">
-          
+      {/* Right Pane — mobile gets a gradient backdrop matching the active role */}
+      <div className={`w-full lg:w-[45%] flex items-center justify-center px-6 py-12 relative
+        bg-gradient-to-br lg:bg-none lg:bg-white
+        ${role === "Estudiante" ? "from-blue-950 via-blue-900 to-blue-800" : role === "Docente" ? "from-emerald-950 via-emerald-900 to-emerald-800" : "from-purple-950 via-purple-900 to-purple-800"}
+      `}>
+        {/* White frosted card on mobile, transparent on desktop */}
+        <div className="w-full max-w-[420px] space-y-8 lg:bg-transparent bg-white/10 backdrop-blur-md lg:backdrop-blur-none rounded-2xl lg:rounded-none p-6 lg:p-0 border border-white/20 lg:border-0">
+
           {/* Header Mobile / Brand Header */}
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
             <div className="lg:hidden w-12 h-12 rounded-xl flex items-center justify-center text-white mb-3 shadow-md" 
               style={{ background: cfg.color }}>
               <GraduationCap size={24} />
             </div>
-            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">¡Bienvenido de nuevo!</h1>
-            <p className="text-sm text-slate-500 mt-2">
+            <h1 className="text-3xl font-extrabold text-white lg:text-slate-900 tracking-tight">¡Bienvenido de nuevo!</h1>
+            <p className="text-sm text-white/70 lg:text-slate-500 mt-2">
               Ingresa tus credenciales para acceder a la intranet institucional de Campus360.
             </p>
           </div>
 
           {/* Role selector */}
           <div className="space-y-3">
-            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+            <label className="text-[11px] font-bold text-white/60 lg:text-slate-400 uppercase tracking-wider block">
               Rol de acceso
             </label>
-            <div className="grid grid-cols-3 gap-2 bg-slate-100/80 p-1.5 rounded-xl border border-slate-200/50">
+            <div className="grid grid-cols-3 gap-2 bg-white/10 lg:bg-slate-100/80 p-1.5 rounded-xl border border-white/20 lg:border-slate-200/50">
               {(Object.keys(roleConfig) as Role[]).map((r) => {
                 const rc = roleConfig[r];
                 const active = role === r;
@@ -133,11 +167,11 @@ function LoginPage() {
                     onClick={() => setRole(r)}
                     className={`flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-lg text-xs font-bold transition-all duration-200 select-none ${
                       active 
-                        ? "bg-white text-slate-900 shadow-sm border-slate-200/20" 
-                        : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 border-transparent"
+                        ? "bg-white text-slate-900 shadow-sm" 
+                        : "text-white/70 lg:text-slate-500 hover:text-white lg:hover:text-slate-800 hover:bg-white/20 lg:hover:bg-slate-200/50"
                     }`}
                   >
-                    <RoleIcon size={16} className={active ? "" : "text-slate-400"} style={active ? { color: rc.color } : {}} />
+                    <RoleIcon size={16} className={active ? "" : "text-white/50 lg:text-slate-400"} style={active ? { color: rc.color } : {}} />
                     {r}
                   </button>
                 );
@@ -151,7 +185,7 @@ function LoginPage() {
             className="space-y-5"
           >
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 block">Correo electrónico institucional</label>
+              <label className="text-xs font-bold text-white lg:text-slate-700 block">Correo electrónico institucional</label>
               <div className="relative group">
                 <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-slate-800" />
                 <input 
@@ -171,8 +205,8 @@ function LoginPage() {
             
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <label className="text-xs font-bold text-slate-700 block">Contraseña</label>
-                <a href="#" className="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors">¿La olvidaste?</a>
+                <label className="text-xs font-bold text-white lg:text-slate-700 block">Contraseña</label>
+                <a href="#" className="text-xs font-bold text-white/70 lg:text-slate-500 hover:text-white lg:hover:text-slate-800 transition-colors">¿La olvidaste?</a>
               </div>
               <div className="relative group">
                 <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-slate-800" />
