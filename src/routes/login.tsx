@@ -131,7 +131,7 @@ function LoginPage() {
         </div>
 
         {/* Right form panel — full width on mobile, 48% on desktop with glass background from left panel */}
-        <div className="w-full lg:w-[48%] flex items-center justify-center px-5 py-10 lg:py-12 glass-panel lg:border-l lg:border-white/50 shadow-2xl">
+        <div className="w-full lg:w-[48%] min-h-screen flex items-center justify-center px-5 py-10 lg:py-12 glass-panel lg:border-l lg:border-white/50 shadow-2xl">
           <div className="w-full max-w-[420px] space-y-7">
 
             {/* Mobile brand header */}
